@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: senthil-service-deployment
+  namespace: shop
+  labels:
+    app: senthil-pricing
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: senthil-pricing
+  template:
+    metadata:
+      labels:
+        app: senthil-pricing
+    spec:
+      containers:
+      - name: senthil-pricing
+        image: siddhi/spring-boot:senthil
+        ports:
+        - containerPort: 8080
+
