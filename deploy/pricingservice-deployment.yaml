@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pricing-service-deployment
+  namespace: shop
+  labels:
+    app: pricing-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pricing-service
+  template:
+    metadata:
+      labels:
+        app: pricing-service
+    spec:
+      containers:
+      - name: pricing-service
+        image: siddhi/spring-boot:pricingservice
+        ports:
+        - containerPort: 8080
+
