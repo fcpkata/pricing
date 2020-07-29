@@ -15,22 +15,22 @@ public class MockShippingChargesService implements ShippingChargesService {
 	
 	public MockShippingChargesService() {
 		shippingCharges = new HashMap<String, Integer>();
-		prepareEntryForSmallDistanceCities(City.Chennai, City.Bengaluru);
-		prepareEntryForSmallDistanceCities(City.Chennai, City.Hyderabad);
-		prepareEntryForSmallDistanceCities(City.Hyderabad, City.Kolkata);
-		prepareEntryForSmallDistanceCities(City.Mumbai, City.Delhi);
-		prepareEntryForSmallDistanceCities(City.Kolkata, City.Delhi);
+		prepareEntryForSmallDistanceCities(City.CHENNAI, City.BENGALURU);
+		prepareEntryForSmallDistanceCities(City.CHENNAI, City.HYDERABAD);
+		prepareEntryForSmallDistanceCities(City.HYDERABAD, City.KOLKATA);
+		prepareEntryForSmallDistanceCities(City.MUMBAI, City.DELHI);
+		prepareEntryForSmallDistanceCities(City.KOLKATA, City.DELHI);
 		
-		prepareEntryForMediumDistanceCities(City.Chennai, City.Mumbai);
-		prepareEntryForMediumDistanceCities(City.Chennai, City.Kolkata);
-		prepareEntryForMediumDistanceCities(City.Bengaluru, City.Mumbai);
-		prepareEntryForMediumDistanceCities(City.Bengaluru, City.Kolkata);
-		prepareEntryForMediumDistanceCities(City.Bengaluru, City.Delhi);
-		prepareEntryForMediumDistanceCities(City.Mumbai, City.Kolkata);
-		prepareEntryForMediumDistanceCities(City.Hyderabad, City.Delhi);
-		prepareEntryForMediumDistanceCities(City.Hyderabad, City.Mumbai);
+		prepareEntryForMediumDistanceCities(City.CHENNAI, City.MUMBAI);
+		prepareEntryForMediumDistanceCities(City.CHENNAI, City.KOLKATA);
+		prepareEntryForMediumDistanceCities(City.BENGALURU, City.MUMBAI);
+		prepareEntryForMediumDistanceCities(City.BENGALURU, City.KOLKATA);
+		prepareEntryForMediumDistanceCities(City.BENGALURU, City.DELHI);
+		prepareEntryForMediumDistanceCities(City.MUMBAI, City.KOLKATA);
+		prepareEntryForMediumDistanceCities(City.HYDERABAD, City.DELHI);
+		prepareEntryForMediumDistanceCities(City.HYDERABAD, City.MUMBAI);
 		
-		prepareEntryForLongDistanceCities(City.Chennai, City.Delhi);
+		prepareEntryForLongDistanceCities(City.CHENNAI, City.DELHI);
 	}
 	
 	private void prepareEntryForLongDistanceCities(City from, City to) {

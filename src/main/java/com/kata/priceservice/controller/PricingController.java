@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kata.priceservice.exception.CityNotFoundException;
+import com.kata.priceservice.exception.InvalidCityException;
 import com.kata.priceservice.service.ShippingPriceCordinator;
 
 import model.City;
@@ -39,7 +40,7 @@ public class PricingController {
 		
 		validate(fromCity, toCity);
 		
-		Price shippingPrice = Price.builder().value(shippingPriceCordinator.findShippingPriceBetween(City.valueOf(fromCity), City.valueOf(toCity))).build();
+		Price shippingPrice = Price.builder().value(shippingPriceCordinator.findShippingPriceBetween(City.valueOf(fromCity.toUpperCase()), City.valueOf(toCity.toUpperCase()))).build();
 		
 		return new ResponseEntity<Price>(shippingPrice, HttpStatus.OK);
 	}
@@ -51,9 +52,14 @@ public class PricingController {
 	
 	private void validate(String city) {
 		try {
-			City.valueOf(city);			
+			if(city == null || city.trim() == null) {
+				throw new NullPointerException();
+			}
+			City.valueOf(city.toUpperCase());			
 		} catch (IllegalArgumentException ex) {
 			throw new CityNotFoundException(city);
+		} catch (Exception ex) {
+			throw new InvalidCityException(city);
 		}
 	}
 

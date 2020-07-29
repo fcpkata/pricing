@@ -2,8 +2,8 @@ package model;
 
 public enum City {
 	
-	Chennai("Domestic"), Mumbai("Domestic"), Kolkata("Domestic"), Delhi("Domestic"), 
-	Bengaluru("Domestic"), Hyderabad("Domestic"), Singapore("International");
+	CHENNAI("Domestic"), MUMBAI("Domestic"), KOLKATA("Domestic"), DELHI("Domestic"), 
+	BENGALURU("Domestic"), HYDERABAD("Domestic"), SINGAPORE("International");
 
 	public final String type;
 

@@ -15,37 +15,37 @@ public class ShippingPriceCordinatorTest {
 	
 	@Test
 	public void findsTheShippingPriceBetweenSameCity() {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Chennai, City.Chennai);
+		int shippingPrice = calculator.findShippingPriceBetween(City.CHENNAI, City.CHENNAI);
 		assertThat(shippingPrice).isEqualTo(0);
 	}
 	
 	@Test
 	public void findsTheShippingPriceBetweenShortDistanceCities() throws Exception {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Chennai, City.Hyderabad);
+		int shippingPrice = calculator.findShippingPriceBetween(City.CHENNAI, City.HYDERABAD);
 		assertThat(shippingPrice).isEqualTo(50);
 	}
 	
 	@Test
 	public void findsTheShippingPriceBetweenMediumDistanceCities() throws Exception {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Mumbai, City.Kolkata);
+		int shippingPrice = calculator.findShippingPriceBetween(City.MUMBAI, City.KOLKATA);
 		assertThat(shippingPrice).isEqualTo(100);
 	}
 	
 	@Test
 	public void findsTheShippingPriceBetweenLongDistanceCities() throws Exception {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Chennai, City.Delhi);
+		int shippingPrice = calculator.findShippingPriceBetween(City.CHENNAI, City.DELHI);
 		assertThat(shippingPrice).isEqualTo(150);
 	}
 	
 	@Test
 	public void findsTheShippingPriceForIntenationalCities() throws Exception {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Chennai, City.Singapore);
+		int shippingPrice = calculator.findShippingPriceBetween(City.CHENNAI, City.SINGAPORE);
 		assertThat(shippingPrice).isEqualTo(250);
 	}
 	
 	@Test
 	public void findsTheShippingPriceBetweenShortDistanceCities_whenFlipped() throws Exception {
-		int shippingPrice = calculator.findShippingPriceBetween(City.Hyderabad, City.Chennai);
+		int shippingPrice = calculator.findShippingPriceBetween(City.HYDERABAD, City.CHENNAI);
 		assertThat(shippingPrice).isEqualTo(50);
 	}
 
