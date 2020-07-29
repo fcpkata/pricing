@@ -27,9 +27,24 @@ public class PricingControllerAcceptanceSpec {
 		
 		mockMvc.perform(get("/v1/price"))
 		.andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.value").value(100))
-		.andExpect(jsonPath("$.currency").value("INR"));
+		.andExpect(jsonPath("$.value").value(100));
 		
+	}
+	
+	@Test
+	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocations() throws Exception {
+		
+		mockMvc.perform(get("/v1/shippingprice?fromCity=Chennai&toCity=Delhi"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.value").value(150));
+	}
+	
+	@Test
+	public void shouldFetchTheShippingCharges_WhenCalledWithUnKnownLocations() throws Exception {
+		
+		mockMvc.perform(get("/v1/shippingprice?fromCity=Chennai&toCity=Dubai"))
+		.andDo(print()).andExpect(status().is4xxClientError())
+		.andExpect(jsonPath("$").value("City Dubai Not Found"));
 	}
 
 }
