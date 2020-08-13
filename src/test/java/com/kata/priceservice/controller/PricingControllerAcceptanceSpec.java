@@ -25,7 +25,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheDefaultPrice_WhenCalledWithoutAnyInput() throws Exception {
 		
-		mockMvc.perform(get("/v1/price"))
+		mockMvc.perform(get("/pricingservice/api/v1/price"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(100));
 		
@@ -34,7 +34,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocations() throws Exception {
 		
-		mockMvc.perform(get("/v1/shippingprice?fromCity=Chennai&toCity=Delhi"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(150));
 	}
@@ -42,7 +42,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithUnKnownLocations() throws Exception {
 		
-		mockMvc.perform(get("/v1/shippingprice?fromCity=Chennai&toCity=Dubai"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai"))
 		.andDo(print()).andExpect(status().is4xxClientError())
 		.andExpect(jsonPath("$").value("City Dubai Not Found"));
 	}

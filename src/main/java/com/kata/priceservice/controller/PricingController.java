@@ -17,7 +17,7 @@ import model.City;
 import model.Price;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/pricingservice/api/v1")
 public class PricingController {
 
 	private ShippingPriceCordinator shippingPriceCordinator;
