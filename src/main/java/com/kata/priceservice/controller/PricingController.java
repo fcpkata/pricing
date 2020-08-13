@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/pricingservice/api/v1")
 public class PricingController {
 
 	@GetMapping(path = "/price", produces = MediaType.APPLICATION_JSON_VALUE)
