@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import model.City;
+import com.kata.priceservice.model.City;
 
 @Component
 public class MockShippingChargesService implements ShippingChargesService {

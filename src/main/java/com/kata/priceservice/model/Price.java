@@ -1,4 +1,4 @@
-package model;
+package com.kata.priceservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
