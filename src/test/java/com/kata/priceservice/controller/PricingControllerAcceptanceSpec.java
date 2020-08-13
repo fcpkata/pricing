@@ -25,7 +25,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheDefaultPrice_WhenCalledWithoutAnyInput() throws Exception {
 		
-		mockMvc.perform(get("/v1/price"))
+		mockMvc.perform(get("/pricingservice/api/v1/price"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(100))
 		.andExpect(jsonPath("$.currency").value("INR"));
