@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kata.priceservice.exception.CityNotFoundException;
 import com.kata.priceservice.exception.InvalidCityException;
-import com.kata.priceservice.service.ShippingPriceCordinator;
-
-import model.City;
-import model.Price;
+import com.kata.priceservice.model.City;
+import com.kata.priceservice.model.Price;
+import com.kata.priceservice.model.ShippingPriceRequest;
+import com.kata.priceservice.service.LocationBasedShippingPriceCalculator;
 
 @RestController
 @RequestMapping("/pricingservice/api/v1")
 public class PricingController {
 
-	private ShippingPriceCordinator shippingPriceCordinator;
+	private LocationBasedShippingPriceCalculator shippingPriceCordinator;
 
 	@Autowired
-	public PricingController(ShippingPriceCordinator shippingPriceCordinator) {
+	public PricingController(LocationBasedShippingPriceCalculator shippingPriceCordinator) {
 		this.shippingPriceCordinator = shippingPriceCordinator;
 	}
 
@@ -39,10 +39,26 @@ public class PricingController {
 			@RequestParam(name= "toCity", required = true) String toCity) {
 		
 		validate(fromCity, toCity);
+		ShippingPriceRequest request = buildShippingPriceRequest(fromCity, toCity);
+		int shippingPrice = shippingPriceCordinator.getPrice(request);
+		ResponseEntity<Price> response = buildResponse(shippingPrice);
 		
-		Price shippingPrice = Price.builder().value(shippingPriceCordinator.findShippingPriceBetween(City.valueOf(fromCity.toUpperCase()), City.valueOf(toCity.toUpperCase()))).build();
-		
-		return new ResponseEntity<Price>(shippingPrice, HttpStatus.OK);
+		return response;
+	}
+
+	private ResponseEntity<Price> buildResponse(int shippingPrice) {
+		Price price = Price.builder()
+								   .value(shippingPrice)
+								   .build();
+		return new ResponseEntity<Price>(price, HttpStatus.OK);
+	}
+
+	private ShippingPriceRequest buildShippingPriceRequest(String fromCity, String toCity) {
+		ShippingPriceRequest request = ShippingPriceRequest.builder()
+														   .fromCity(City.valueOf(fromCity.toUpperCase()))
+														   .toCity(City.valueOf(toCity.toUpperCase()))
+														   .build();
+		return request;
 	}
 
 	public void validate(String fromCity, String toCity) {
