@@ -11,19 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kata.priceservice.exception.CityNotFoundException;
 import com.kata.priceservice.exception.InvalidCityException;
+import com.kata.priceservice.exception.InvalidWeightException;
 import com.kata.priceservice.model.City;
 import com.kata.priceservice.model.Price;
 import com.kata.priceservice.model.ShippingPriceRequest;
 import com.kata.priceservice.service.LocationBasedShippingPriceCalculator;
+import com.kata.priceservice.service.ShippingPriceCoordindator;
 
 @RestController
 @RequestMapping("/pricingservice/api/v1")
 public class PricingController {
 
-	private LocationBasedShippingPriceCalculator shippingPriceCordinator;
+	private ShippingPriceCoordindator  shippingPriceCordinator;
 
 	@Autowired
-	public PricingController(LocationBasedShippingPriceCalculator shippingPriceCordinator) {
+	public PricingController(ShippingPriceCoordindator  shippingPriceCordinator) {
 		this.shippingPriceCordinator = shippingPriceCordinator;
 	}
 
@@ -36,10 +38,10 @@ public class PricingController {
 
 	@GetMapping(path = "/shippingprice")
 	public ResponseEntity<Price> getShippingChargesFor(@RequestParam(name= "fromCity", required = true) String fromCity,
-			@RequestParam(name= "toCity", required = true) String toCity) {
+			@RequestParam(name= "toCity", required = true) String toCity, @RequestParam(name= "weight", required = true) double weight) {
 		
-		validate(fromCity, toCity);
-		ShippingPriceRequest request = buildShippingPriceRequest(fromCity, toCity);
+		validate(fromCity, toCity, weight);
+		ShippingPriceRequest request = buildShippingPriceRequest(fromCity, toCity, weight);
 		int shippingPrice = shippingPriceCordinator.getPrice(request);
 		ResponseEntity<Price> response = buildResponse(shippingPrice);
 		
@@ -53,19 +55,28 @@ public class PricingController {
 		return new ResponseEntity<Price>(price, HttpStatus.OK);
 	}
 
-	private ShippingPriceRequest buildShippingPriceRequest(String fromCity, String toCity) {
+	private ShippingPriceRequest buildShippingPriceRequest(String fromCity, String toCity, double weight) {
 		ShippingPriceRequest request = ShippingPriceRequest.builder()
 														   .fromCity(City.valueOf(fromCity.toUpperCase()))
 														   .toCity(City.valueOf(toCity.toUpperCase()))
+														   .weight(weight)
 														   .build();
 		return request;
 	}
 
-	public void validate(String fromCity, String toCity) {
+	public void validate(String fromCity, String toCity, double weight) {
 		this.validate(fromCity);
 		this.validate(toCity);
+		this.validateWeight(weight);
 	}
 	
+	private void validateWeight(double weight) {
+		if(weight<0)
+		{
+			throw new InvalidWeightException(weight);
+		}
+	}
+
 	private void validate(String city) {
 		try {
 			if(city == null || city.trim() == null) {

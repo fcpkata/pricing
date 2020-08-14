@@ -34,7 +34,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=10"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(150));
 	}
@@ -42,9 +42,25 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithUnKnownLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai&weight=10"))
 		.andDo(print()).andExpect(status().is4xxClientError())
 		.andExpect(jsonPath("$").value("City Dubai Not Found"));
+	}
+	
+	@Test
+	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocationsAndWeight() throws Exception {
+		
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=10"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.value").value(150));
+	}
+	
+	@Test
+	public void shouldThrow400BadRequestWhenCalledWithInvalidWeight() throws Exception {
+		
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=-1"))
+		.andDo(print()).andExpect(status().is4xxClientError())
+		.andExpect(jsonPath("$").value("Given weight -1.0 is invalid"));
 	}
 
 }

@@ -12,10 +12,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import com.kata.priceservice.exception.CityNotFoundException;
+import com.kata.priceservice.exception.InvalidWeightException;
 import com.kata.priceservice.model.City;
 import com.kata.priceservice.model.Price;
 import com.kata.priceservice.model.ShippingPriceRequest;
 import com.kata.priceservice.service.LocationBasedShippingPriceCalculator;
+import com.kata.priceservice.service.ShippingPriceCoordindator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PricingControllerSpec {
@@ -25,7 +27,7 @@ public class PricingControllerSpec {
 	private static final String FROM_CITY = "Chennai";
 
 	@Mock
-	private LocationBasedShippingPriceCalculator mockShippingPriceCordinator;
+	private ShippingPriceCoordindator  mockShippingPriceCordinator;
 	
 	public PricingController controller;
 	
@@ -51,7 +53,7 @@ public class PricingControllerSpec {
 		
 		mockTheServiceResponce(request);
 		
-		ResponseEntity<Price> response = controller.getShippingChargesFor(FROM_CITY, TO_CITY);
+		ResponseEntity<Price> response = controller.getShippingChargesFor(FROM_CITY, TO_CITY,200);
 		assertThat(response.getBody()).isEqualTo(new Price(50));	
 	}
 
@@ -61,7 +63,12 @@ public class PricingControllerSpec {
 	
 	@Test(expected = CityNotFoundException.class)
 	public void validatesTheCity() throws Exception {
-		controller.validate(FROM_CITY,"Dubai");
+		controller.validate(FROM_CITY,"Dubai", 0);
+	}
+	
+	@Test(expected = InvalidWeightException.class)
+	public void validateWeight() throws Exception {
+		controller.validate("Chennai", "Hyderabad", -2);
 	}
 }
 

@@ -7,15 +7,20 @@ import org.springframework.stereotype.Service;
 import com.kata.priceservice.model.ShippingPriceRequest;
 
 @Service
-public class ShippingPriceCoordindator {
+public class ShippingPriceCoordindator{
 	private ShippingPriceCalculator calculator;
 	
 	@Autowired
-	public ShippingPriceCoordindator(@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingCoordinator) {
+	public ShippingPriceCoordindator(@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingCoordinator,
+			@Qualifier("weightBasedShippingPriceCalculator") ShippingPriceCalculator weightBasedShippingPriceCalculator) {
+		
+		locationBasedShippingCoordinator.setNextCalculator(weightBasedShippingPriceCalculator);
 		this.calculator = locationBasedShippingCoordinator;
 	}
 	
 	public int getPrice(ShippingPriceRequest request) {
 		return calculator.getPrice(request);
+		
 	}
+
 }
