@@ -11,8 +11,10 @@ public class ShippingPriceCoordindator {
 	private ShippingPriceCalculator calculator;
 	
 	@Autowired
-	public ShippingPriceCoordindator(@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingCoordinator) {
-		this.calculator = locationBasedShippingCoordinator;
+	public ShippingPriceCoordindator(@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingPriceCalculator,
+									 @Qualifier("volumeBasedShippingPriceCalculator") ShippingPriceCalculator volumeBasedShippingPriceCalculator) {
+		locationBasedShippingPriceCalculator.setNextCalculator(volumeBasedShippingPriceCalculator);
+		this.calculator = locationBasedShippingPriceCalculator;
 	}
 	
 	public int getPrice(ShippingPriceRequest request) {

@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 public class ShippingPriceRequest {
 	private City fromCity;
 	private City toCity;
+	private int volume;
 }
