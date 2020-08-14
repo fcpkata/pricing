@@ -34,17 +34,34 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&volume=49"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(150));
 	}
 	
 	@Test
-	public void shouldFetchTheShippingCharges_WhenCalledWithUnKnownLocations() throws Exception {
+	public void shouldReturnNotFound_WhenCalledWithUnKnownLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai"))
-		.andDo(print()).andExpect(status().is4xxClientError())
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai&volume=0"))
+		.andDo(print()).andExpect(status().isNotFound())
 		.andExpect(jsonPath("$").value("City Dubai Not Found"));
+	}
+	
+	@Test
+	public void shouldReturnBadRequest_whenVolumeIsNegative() throws Exception {
+		
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Hyderabad&volume=-1"))
+		.andDo(print())
+		.andExpect(status().isBadRequest())
+		.andExpect(jsonPath("$").value("Valid volume parameter required"));
+	}
+	
+	@Test
+	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocationsAndVolume() throws Exception {
+		
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&volume=500"))
+		.andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.value").value(160));
 	}
 
 }
