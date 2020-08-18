@@ -15,4 +15,5 @@ public class ShippingPriceRequest {
 	private City fromCity;
 	private City toCity;
 	private int volume;
+	private double weight;
 }
