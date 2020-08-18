@@ -9,15 +9,21 @@ import com.kata.priceservice.model.ShippingPriceRequest;
 @Service
 public class ShippingPriceCoordindator {
 	private ShippingPriceCalculator calculator;
-	
+
 	@Autowired
-	public ShippingPriceCoordindator(@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingPriceCalculator,
-									 @Qualifier("volumeBasedShippingPriceCalculator") ShippingPriceCalculator volumeBasedShippingPriceCalculator) {
+	public ShippingPriceCoordindator(
+			@Qualifier("locationBasedShippingPriceCalculator") ShippingPriceCalculator locationBasedShippingPriceCalculator,
+			@Qualifier("volumeBasedShippingPriceCalculator") ShippingPriceCalculator volumeBasedShippingPriceCalculator,
+			@Qualifier("weightBasedShippingPriceCalculator") ShippingPriceCalculator weightBasedShippingPriceCalculator) {
 		locationBasedShippingPriceCalculator.setNextCalculator(volumeBasedShippingPriceCalculator);
+		volumeBasedShippingPriceCalculator.setNextCalculator(weightBasedShippingPriceCalculator);
 		this.calculator = locationBasedShippingPriceCalculator;
+
 	}
-	
+
 	public int getPrice(ShippingPriceRequest request) {
 		return calculator.getPrice(request);
+
 	}
+
 }

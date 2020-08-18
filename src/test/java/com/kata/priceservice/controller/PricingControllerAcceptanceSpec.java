@@ -34,7 +34,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&volume=49"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=10&volume=49"))
 		.andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.value").value(150));
 	}
@@ -42,7 +42,7 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldReturnNotFound_WhenCalledWithUnKnownLocations() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai&volume=0"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Dubai&weight=10&volume=0"))
 		.andDo(print()).andExpect(status().isNotFound())
 		.andExpect(jsonPath("$").value("City Dubai Not Found"));
 	}
@@ -50,18 +50,26 @@ public class PricingControllerAcceptanceSpec {
 	@Test
 	public void shouldReturnBadRequest_whenVolumeIsNegative() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Hyderabad&volume=-1"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Hyderabad&weight=10&volume=-1"))
 		.andDo(print())
 		.andExpect(status().isBadRequest())
 		.andExpect(jsonPath("$").value("Valid volume parameter required"));
 	}
 	
 	@Test
-	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocationsAndVolume() throws Exception {
+	public void shouldFetchTheShippingCharges_WhenCalledWithTwoDifferentLocationsAndWeightAndVolume() throws Exception {
 		
-		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&volume=500"))
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=300&volume=500"))
 		.andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.value").value(160));
+		.andExpect(jsonPath("$.value").value(185));
+	}
+	
+	@Test
+	public void shouldThrow400BadRequestWhenCalledWithInvalidWeight() throws Exception {
+		
+		mockMvc.perform(get("/pricingservice/api/v1/shippingprice?fromCity=Chennai&toCity=Delhi&weight=-1&volume=-1"))
+		.andDo(print()).andExpect(status().is4xxClientError())
+		.andExpect(jsonPath("$").value("Given weight -1.0 is invalid"));
 	}
 
 }
